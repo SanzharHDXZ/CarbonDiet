@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CarbonDiet 2.0 - Track Your Food's CO₂ Footprint</title>
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+    <div class="switch-container">
+        <span>🌙</span>
+        <label class="switch">
+            <input type="checkbox" id="dark-mode-toggle">
+            <span class="slider"></span>
+        </label>
+        <span>☀️</span>
+    </div>
+
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <h1>CarbonDiet</h1>
+                <span class="logo-icon">🌱</span>
+            </div>
+            <p class="tagline">Track your food's carbon footprint and make sustainable choices for our planet</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="app-container">
+            <div class="input-section">
+                <div class="card">
+                    <h2>🥗 Your Food Diary</h2>
+                    
+                    <div class="tabs">
+                        <div class="tab active" data-tab="add-food">Add Food</div>
+                        <div class="tab" data-tab="my-meals">My Meals</div>
+                        <div class="tab" data-tab="favorites">Favorites</div>
+                    </div>
+                    
+                    <div class="tab-content active" id="add-food-content">
+                        <div class="food-search">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" id="food-search" class="search-input" placeholder="Search foods...">
+                        </div>
+                        
+                        <div class="food-category-select">
+                            <div class="category-chip active" data-category="all">All</div>
+                            <div class="category-chip" data-category="Meat">Meat</div>
+                            <div class="category-chip" data-category="Seafood">Seafood</div>
+                            <div class="category-chip" data-category="Dairy & Eggs">Dairy & Eggs</div>
+                            <div class="category-chip" data-category="Grains">Grains</div>
+                            <div class="category-chip" data-category="Vegetables">Vegetables</div>
+                            <div class="category-chip" data-category="Fruits">Fruits</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="food-select">Select Food Item:</label>
+                            <select id="food-select">
+                                <option value="">Choose an item</option>
+                                <!-- Food options will be populated by JavaScript -->
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="quantity">Quantity (grams):</label>
+                            <input type="number" id="quantity" min="1" value="100">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="meal-time">Meal:</label>
+                            <select id="meal-time">
+                                <option value="breakfast">Breakfast</option>
+                                <option value="lunch">Lunch</option>
+                                <option value="dinner">Dinner</option>
+                                <option value="snack">Snack</option>
+                            </select>
+                        </div>
+                        
+                        <button id="add-food" class="btn">
+                            <span>Add to Today's Log</span>
+                            <span>+</span>
+                        </button>
+                    </div>
+                    
+                    <div class="tab-content" id="my-meals-content">
+                        <div class="form-group">
+                            <label for="saved-meals">Your Saved Meals:</label>
+                            <select id="saved-meals">
+                                <option value="">Select a saved meal</option>
+                                <option value="vegetarian-breakfast">Vegetarian Breakfast</option>
+                                <option value="protein-lunch">High Protein Lunch</option>
+                                <option value="salad-dinner">Mediterranean Salad Dinner</option>
+                            </select>
+                        </div>
+                        <button id="add-saved-meal" class="btn">Add this meal</button>
+                        
+                        <div style="margin-top: 20px;">
+                            <label for="meal-name">Save current items as a meal:</label>
+                            <div class="form-group">
+                                <input type="text" id="meal-name" placeholder="Enter meal name">
+                            </div>
+                            <button id="save-meal" class="btn" style="background-color: var(--info)">Save This Meal</button>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="favorites-content">
+                        <div class="food-list" id="favorites-list">
+                            <div class="food-item">
+                                <div class="food-info">
+                                    <div class="food-name">🥑 Avocado Toast</div>
+                                    <div class="food-meta">
+                                        <div class="food-co2">0.67 kg CO₂</div>
+                                    </div>
+                                </div>
+                                <button class="btn" style="padding: 6px 12px;">Add</button>
+                            </div>
+                            <div class="food-item">
+                                <div class="food-info">
+                                    <div class="food-name">🍲 Vegetable Stir Fry</div>
+                                    <div class="food-meta">
+                                        <div class="food-co2">0.42 kg CO₂</div>
+                                    </div>
+                                </div>
+                                <button class="btn" style="padding: 6px 12px;">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>📊 Your Carbon Impact</h2>
+                    <div class="result-panel">
+                        <div class="daily-goal">Daily Goal: 3.0 kg CO₂</div>
+                        <div class="co2-total" id="co2-total">0.00</div>
+                        <div class="co2-unit">kg CO₂ equivalent today</div>
+                        
+                        <div class="goal-progress">
+                            <div class="progress-bar" id="goal-progress-bar" style="width: 0%"></div>
+                        </div>
+                        
+                        <div class="co2-comparison">
+                            This is equivalent to driving <span id="driving-equivalent">0</span> miles in an average car
+                        </div>
+                    </div>
+                    
+                    <div class="charts">
+                        <div>
+                            <div class="chart-title">Contribution by Food Category</div>
+                            <div class="chart-container">
+                                <canvas id="category-chart"></canvas>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="chart-title">Weekly Trend</div>
+                            <div class="chart-container">
+                                <canvas id="trend-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h2>📅 Progress Tracker</h2>
+                    <div class="daily-summary">
+                        <h3>
+                            <span>📈</span>
+                            <span>Your Journey</span>
+                        </h3>
+                        <p>You're on track to reduce your carbon footprint by <strong>23%</strong> this month compared to last month.</p>
+                        
+                        <div class="streak-info">
+                            <span>Current streak:</span>
+                            <span class="streak-count">5 days</span>
+                            <span>under your daily goal!</span>
+                        </div>
+                        
+                        <div class="category-breakdown">
+                            <div class="category-bar">
+                                <div class="category-name">Meat</div>
+                                <div class="category-bar-container">
+                                    <div class="category-bar-fill" style="width: 65%; background-color: var(--danger);"></div>
+                                </div>
+                                <div class="category-percentage">65%</div>
+                            </div>
+                            <div class="category-bar">
+                                <div class="category-name">Dairy</div>
+                                <div class="category-bar-container">
+                                    <div class="category-bar-fill" style="width: 20%; background-color: var(--warning);"></div>
+                                </div>
+                                <div class="category-percentage">20%</div>
+                            </div>
+                            <div class="category-bar">
+                                <div class="category-name">Vegetables</div>
+                                <div class="category-bar-container">
+                                    <div class="category-bar-fill" style="width: 8%; background-color: var(--primary);"></div>
+                                </div>
+                                <div class="category-percentage">8%</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tips-carousel">
+                        <div class="tips-title">
+                            <span>💡</span>
+                            <span>Eco Tip of the Day</span>
+                        </div>
+                        <div class="tip-content">
+                            <p>Try "Meatless Mondays" - replacing beef with plant-based alternatives just once a week can reduce your food carbon footprint by up to 15%.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="summary-section">
+                <div class="card">
+                    <h2>🍽️ Today's Food Log</h2>
+                    <ul class="food-list" id="food-list">
+                        <!-- Food items will be added here by JavaScript -->
+                    </ul>
+                    <div style="display: flex; gap: 10px; margin-top: 15px;">
+                        <button id="clear-all" class="btn btn-warning" style="flex: 1;">Clear All</button>
+                        <button id="export-data" class="btn" style="flex: 1; background-color: var(--info);">Export Data</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>💡 Smart Recommendations</h2>
+                    <div class="recommendations" id="recommendations">
+                        <!-- Recommendations will be added here by JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h2>🔎 Food Compare</h2>
+                    <div class="form-group">
+                        <label for="compare-food1">Compare:</label>
+                        <select id="compare-food1">
+                            <option value="">Select first food</option>
+                            <!-- Food options will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="compare-food2">With:</label>
+                        <select id="compare-food2">
+                            <option value="">Select second food</option>
+                            <!-- Food options will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    <button id="compare-foods" class="btn" style="background-color: var(--info);">Compare</button>
+                    
+                    <div class="chart-container" style="margin-top: 20px; height: 200px;">
+                        <canvas id="comparison-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>CarbonDiet 2.0 - Track and reduce your food's carbon footprint</p>
+        <p>Data sources: FAO, Environmental Working Group, and academic research on food production emissions</p>
+        <p>© 2025 CarbonDiet - Making sustainable eating easier</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
