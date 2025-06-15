@@ -1,6 +1,6 @@
 **CarbonDiet** is a lightweight web app that helps users track the carbon footprint of their food and make more sustainable choices for the planet.
 
-![CarbonDiet Screenshot](Skrinshotik.png)
+!Skrinshotik.png
 
 ---
 
